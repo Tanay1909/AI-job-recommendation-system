@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>History</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="topbar">
+    <div>
+        <a href="/">🏠 Home</a>
+    </div>
+    <div>
+        📊 History Dashboard
+    </div>
+    <div>
+        <a href="/logout">Logout</a>
+    </div>
+</div>
+
+<div class="container">
+
+<h1>📜 Your History</h1>
+
+{% if data %}
+
+<div class="history-grid">
+
+{% for row in data %}
+
+<div class="history-card">
+    <h3>Resume Skills</h3>
+    <p>{{ row[2] }}</p>
+
+```
+<h4>Recommendations</h4>
+<pre>{{ row[3] }}</pre>
+```
+
+</div>
+{% endfor %}
+
+</div>
+{% else %}
+<p>No history found</p>
+{% endif %}
+
+</div>
+
+</body>
+</html>

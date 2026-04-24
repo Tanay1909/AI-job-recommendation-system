@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>AI Job Recommender</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<!-- TOPBAR -->
+
+<div class="topbar">
+    <div class="left">
+        {% if user %}
+            Welcome {{ user }}
+        {% else %}
+            <a href="/login">Login</a>
+        {% endif %}
+    </div>
+
+```
+<div class="center">
+    AI Resume Analyzer
+</div>
+
+<div class="right">
+    <button onclick="toggleTheme()">🌙</button>
+</div>
+```
+
+</div>
+
+<!-- MAIN -->
+
+<div class="container">
+
+<h1>🚀 AI Job Recommender</h1>
+<p class="subtitle">Upload your resume and get smart job matches</p>
+
+<div class="card">
+<form method="POST" enctype="multipart/form-data">
+
+```
+<div class="upload-box" onclick="document.getElementById('file').click()">
+    <p>📂 Drag & Drop your Resume</p>
+    <span>or click to upload</span>
+</div>
+
+<input type="file" id="file" name="resume_file" required>
+
+<button type="submit">Analyze Resume</button>
+```
+
+</form>
+</div>
+
+{% if skills %}
+
+<p class="skills"><b>Skills:</b> {{ skills }}</p>
+{% endif %}
+
+{% if results %}
+
+<h2 class="section-title">🎯 Top Matches</h2>
+
+<div class="results-grid">
+{% for job in results %}
+<div class="job-card">
+    <h3>{{ job.job_title }}</h3>
+    <p class="desc">{{ job.description }}</p>
+
+```
+<div class="progress-box">
+    <div class="progress-bar" style="width: {{ job['match (%)'] }}%"></div>
+</div>
+
+<span class="score">{{ job['match (%)'] }}%</span>
+```
+
+</div>
+{% endfor %}
+</div>
+
+<!-- CHART -->
+
+<canvas id="chart"></canvas>
+
+<script>
+let labels = [{% for job in results %}"{{job.job_title}}",{% endfor %}];
+let data = [{% for job in results %}{{job['match (%)']}},{% endfor %}];
+
+new Chart(document.getElementById("chart"), {
+    type:'bar',
+    data:{
+        labels:labels,
+        datasets:[{
+            label:"Match %",
+            data:data,
+            backgroundColor:"#00c6ff"
+        }]
+    }
+});
+</script>
+
+<!-- BIG DOWNLOAD BUTTON -->
+
+<div class="download-container">
+    <a href="/download" class="download-btn">
+        📥 Download Full Report
+    </a>
+</div>
+
+{% endif %}
+
+</div>
+
+<script>
+function toggleTheme(){
+    document.body.classList.toggle("light");
+}
+</script>
+
+</body>
+</html>
