@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, session, send_file
-import sqlite3, json, io
+import sqlite3, json, io, os
 
 # ML imports
 from src.ingestion import load_data
@@ -113,6 +113,7 @@ def history():
     c = conn.cursor()
     c.execute("SELECT * FROM history WHERE username=?", (session["user"],))
     data = c.fetchall()
+    conn.close()
 
     return render_template("history.html", data=data)
 
@@ -155,4 +156,4 @@ def download():
 
 # ---------------- RUN APP ----------------
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
